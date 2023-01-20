@@ -12,8 +12,8 @@ import ingest_api as all_ingest_api
 
 def rr_auctions_parser():
 
-    crawl_started = all_ingest_api.start_crawl()
-    print("crawl_started", crawl_started['id'])
+    # crawl_started = all_ingest_api.start_crawl()
+    # print("crawl_started", crawl_started['id'])
 
     error_count = 0
     asset_counter = 0
@@ -124,7 +124,7 @@ def rr_auctions_parser():
                         asset_link = "https://www.rrauction.com/" + each_asset_link["href"]
                         # print(each_asset_link["href"])
                         asset_id = each_asset_link["href"].split("/")[3].split("-")[0]
-                        print(asset_id)
+                        # print(asset_id)
                         all_asset_links.append(asset_link)
 
                         resp_details, status_msg =  asset_link_parser(asset_link , asset_id)
@@ -197,8 +197,8 @@ def rr_auctions_parser():
         elif error_count > 0 and asset_counter == 0:
             crawl_status = 'error'
 
-        end_crawler_resp = all_ingest_api.end_crawl(asset_counter, crawl_started, crawl_status, result_list, None,
-                                                    error_count)
+        # end_crawler_resp = all_ingest_api.end_crawl(asset_counter, crawl_started, crawl_status, result_list, None,
+        #                                             error_count)
         print("end_crawler_resp", end_crawler_resp)
         print("asset count =" + str(asset_counter) + "and error count = " + str(error_count))
 
@@ -206,7 +206,7 @@ def rr_auctions_parser():
         print("error in main" , e)
 
 
-        all_ingest_api.end_crawl(asset_counter, crawl_started, "error", result_list, str(e), error_count)
+        # all_ingest_api.end_crawl(asset_counter, crawl_started, "error", result_list, str(e), error_count)
 
 
 def asset_link_parser(asset_link , asset_id):
@@ -216,6 +216,7 @@ def asset_link_parser(asset_link , asset_id):
         current_bid = 0
         status = None
         winning_bid = None
+        offering_end = None
         
 
         payload = {}
@@ -226,7 +227,7 @@ def asset_link_parser(asset_link , asset_id):
         new_session = requests.session()
 
         crawler_response = new_session.get(asset_link, headers=headers, data=payload)
-        # print("crawler_response" , crawler_response)
+        print("crawler_response" , crawler_response)
 
         #################################################################
 
@@ -359,5 +360,5 @@ if __name__ == '__main__':
 
 
 
-    # resp , error_msg = asset_link_parser("https://www.rrauction.com/auctions/lot-detail/346116206488001-bob-dylan-signed-photograph/?cat=0" , "346116206488001")
-    # print(resp)
+    resp , error_msg = asset_link_parser("https://www.rrauction.com/auctions/lot-detail/346116206488001-bob-dylan-signed-photograph/?cat=0" , "346116206488001")
+    print(resp)
